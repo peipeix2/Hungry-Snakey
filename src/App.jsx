@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { TOTAL_BOARD_SIZE, INITIAL_SNAKE_POSITION } from './utils'
 import Score from './components/Score'
 
@@ -13,6 +13,17 @@ function App() {
   const [snake, setSnake] = useState(INITIAL_SNAKE_POSITION)
   const [food, setFood] = useState({ x: 0, y: 0 })
   const [score, setScore] = useState(30)
+  const [direction, setDirection] = useState('UP')
+
+  useEffect(() => {
+    const interval = setInterval(() => updatePosition(direction), 500)
+    return () => clearInterval(interval)
+  }, [snake])
+
+  useEffect(() => {
+    window.addEventListener('keydown', updateDirection)
+    return () => window.removeEventListener('keydown', updateDirection)
+  }, [direction])
 
   function renderBoard(totalBoardSize) {
     const boardArray = []
@@ -28,6 +39,53 @@ function App() {
       }
     }
     return boardArray
+  }
+
+  function updatePosition(direction) {
+    const newSnakePosition = [...snake]
+    switch (direction) {
+      case 'UP':
+        newSnakePosition.unshift({
+          x: newSnakePosition[0].x - 1,
+          y: newSnakePosition[0].y,
+        })
+        break
+      case 'DOWN':
+        newSnakePosition.unshift({
+          x: newSnakePosition[0].x + 1,
+          y: newSnakePosition[0].y,
+        })
+        break
+      case 'LEFT':
+        newSnakePosition.unshift({
+          x: newSnakePosition[0].x,
+          y: newSnakePosition[0].y - 1,
+        })
+        break
+      case 'RIGHT':
+        newSnakePosition.unshift({
+          x: newSnakePosition[0].x,
+          y: newSnakePosition[0].y + 1,
+        })
+        break
+    }
+    newSnakePosition.pop()
+    setSnake(newSnakePosition)
+  }
+
+  function updateDirection(e) {
+    if (e.key === 'ArrowUp' && direction !== 'DOWN') {
+      setDirection('UP')
+    }
+    if (e.key === 'ArrowDown' && direction !== 'UP') {
+      setDirection('DOWN')
+    }
+    if (e.key === 'ArrowLeft' && direction !== 'RIGHT') {
+      setDirection('LEFT')
+    }
+    if (e.key === 'ArrowRight' && direction !== 'LEFT') {
+      setDirection('RIGHT')
+    }
   }
 
   return (
