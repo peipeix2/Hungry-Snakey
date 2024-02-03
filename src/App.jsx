@@ -69,7 +69,15 @@ function App() {
         })
         break
     }
-    newSnakePosition.pop()
+
+    const isFoodEaten =
+      newSnakePosition[0].x === food.x && newSnakePosition[0].y === food.y
+    if (isFoodEaten) {
+      renderFood()
+      setScore((prev) => prev + 10)
+    } else {
+      newSnakePosition.pop()
+    }
     setSnake(newSnakePosition)
   }
 
@@ -86,6 +94,12 @@ function App() {
     if (e.key === 'ArrowRight' && direction !== 'LEFT') {
       setDirection('RIGHT')
     }
+  }
+
+  function renderFood() {
+    const xPosition = Math.floor(Math.random() * TOTAL_BOARD_SIZE)
+    const yPosition = Math.floor(Math.random() * TOTAL_BOARD_SIZE)
+    setFood({ x: xPosition, y: yPosition })
   }
 
   return (
