@@ -1,1 +1,5 @@
 export const TOTAL_BOARD_SIZE = 20
+export const INITIAL_SNAKE_POSITION = [
+  { x: TOTAL_BOARD_SIZE / 2, y: TOTAL_BOARD_SIZE / 2 },
+  { x: TOTAL_BOARD_SIZE / 2 + 1, y: TOTAL_BOARD_SIZE / 2 },
+]

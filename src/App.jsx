@@ -1,13 +1,16 @@
 import { useState } from 'react'
-import { TOTAL_BOARD_SIZE } from './utils'
+import { TOTAL_BOARD_SIZE, INITIAL_SNAKE_POSITION } from './utils'
 import Score from './components/Score'
 
+function generateCellStyle(isSnake, isFood) {
+  let cellStyle = 'h-6 w-6 border border-black '
+  if (isSnake) return (cellStyle += 'bg-white')
+  if (isFood) return (cellStyle += 'bg-red-800')
+  return (cellStyle += 'bg-slate-800')
+}
+
 function App() {
-  const initialSnakePosition = [
-    { x: TOTAL_BOARD_SIZE / 2, y: TOTAL_BOARD_SIZE / 2 },
-    { x: TOTAL_BOARD_SIZE / 2 + 1, y: TOTAL_BOARD_SIZE / 2 },
-  ]
-  const [snake, setSnake] = useState(initialSnakePosition)
+  const [snake, setSnake] = useState(INITIAL_SNAKE_POSITION)
   const [food, setFood] = useState({ x: 0, y: 0 })
   const [score, setScore] = useState(30)
 
@@ -18,13 +21,7 @@ function App() {
         const isSnake = snake.some((item) => item.x === row && item.y === col)
         const isFood = food.x === row && food.y === col
 
-        let cellStyle = 'h-6 w-6 border border-black bg-slate-800'
-        if (isSnake) {
-          cellStyle = 'h-6 w-6 border border-black bg-white'
-        }
-        if (isFood) {
-          cellStyle = 'h-6 w-6 border border-black bg-red-800'
-        }
+        const cellStyle = generateCellStyle(isSnake, isFood)
 
         const cell = <div className={cellStyle} key={`${row}-${col}`} />
         boardArray.push(cell)
