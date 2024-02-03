@@ -1,10 +1,32 @@
-import './App.css'
+import { TOTAL_BOARD_SIZE } from './utils'
+
+function renderBoard(totalBoardSize) {
+  const boardArray = []
+  for (let row = 0; row < totalBoardSize; row++) {
+    for (let col = 0; col < totalBoardSize; col++) {
+      const cell = (
+        <div
+          className="h-6 w-6 border border-black bg-slate-800"
+          key={`${row}-${col}`}
+        />
+      )
+      boardArray.push(cell)
+    }
+  }
+  return boardArray
+}
 
 function App() {
   return (
-    <h1 className="bg-sky-700 px-4 py-2 text-white hover:bg-sky-800 sm:px-8 sm:py-3">
-      Hello World
-    </h1>
+    <div className="container flex h-screen w-screen max-w-full flex-col items-center justify-center bg-black">
+      <div className="score flex gap-2 text-white">
+        <p>Score</p>
+        <p>30</p>
+      </div>
+      <div className="board grid-cols-20 grid-rows-20 grid">
+        {renderBoard(TOTAL_BOARD_SIZE)}
+      </div>
+    </div>
   )
 }
 
