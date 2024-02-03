@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { TOTAL_BOARD_SIZE, INITIAL_SNAKE_POSITION } from './utils'
 import Score from './components/Score'
+import StatusMap from './components/StatusMap'
 
 function generateCellStyle(isSnake, isFood) {
   let cellStyle = 'h-6 w-6 border border-black '
@@ -16,12 +17,17 @@ function App() {
     y: Math.floor(Math.random() * TOTAL_BOARD_SIZE),
   })
   const [score, setScore] = useState(0)
-  const [direction, setDirection] = useState('UP')
+  const [direction, setDirection] = useState('RIGHT')
+  const [isGameStart, setIsGameStart] = useState(false)
+  const [isGameOver, setIsGameOver] = useState(false)
 
   useEffect(() => {
-    const interval = setInterval(() => updatePosition(direction), 300)
+    const interval = setInterval(() => {
+      if (!isGameStart) return
+      updatePosition(direction)
+    }, 300)
     return () => clearInterval(interval)
-  }, [snake])
+  }, [snake, isGameStart])
 
   useEffect(() => {
     window.addEventListener('keydown', updateDirection)
@@ -52,6 +58,8 @@ function App() {
       .some((item) => item.x === snake[0].x && item.y === snake[0].y)
 
     if (isCollidedWithGrid || isHitItself) {
+      setIsGameOver(true)
+      setIsGameStart(false)
       return resetGame()
     }
 
@@ -119,14 +127,23 @@ function App() {
     setSnake(INITIAL_SNAKE_POSITION)
     setScore(0)
     renderFood()
-    setDirection('UP')
+    setDirection('RIGHT')
+  }
+
+  function startGame() {
+    setIsGameStart(true)
   }
 
   return (
     <div className="container flex h-screen w-screen max-w-full flex-col items-center justify-center bg-black">
       <Score score={score} />
-      <div className="board grid-cols-20 grid-rows-20 grid">
+      <div className="board grid-cols-20 grid-rows-20 relative grid">
         {renderBoard(TOTAL_BOARD_SIZE)}
+        <StatusMap
+          isGameStart={isGameStart}
+          isGameOver={isGameOver}
+          startGame={startGame}
+        />
       </div>
     </div>
   )
