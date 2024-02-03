@@ -16,10 +16,10 @@ function App() {
     y: Math.floor(Math.random() * TOTAL_BOARD_SIZE),
   })
   const [score, setScore] = useState(0)
-  const [direction, setDirection] = useState('LEFT')
+  const [direction, setDirection] = useState('UP')
 
   useEffect(() => {
-    const interval = setInterval(() => updatePosition(direction), 500)
+    const interval = setInterval(() => updatePosition(direction), 300)
     return () => clearInterval(interval)
   }, [snake])
 
@@ -45,6 +45,16 @@ function App() {
   }
 
   function updatePosition(direction) {
+    const isCollidedWithGrid =
+      snake[0].x < 0 || snake[0].x > 19 || snake[0].y < 0 || snake[0].y > 19
+    const isHitItself = snake
+      .slice(1)
+      .some((item) => item.x === snake[0].x && item.y === snake[0].y)
+
+    if (isCollidedWithGrid || isHitItself) {
+      return resetGame()
+    }
+
     const newSnakePosition = [...snake]
     switch (direction) {
       case 'UP':
@@ -103,6 +113,13 @@ function App() {
     const xPosition = Math.floor(Math.random() * TOTAL_BOARD_SIZE)
     const yPosition = Math.floor(Math.random() * TOTAL_BOARD_SIZE)
     setFood({ x: xPosition, y: yPosition })
+  }
+
+  function resetGame() {
+    setSnake(INITIAL_SNAKE_POSITION)
+    setScore(0)
+    renderFood()
+    setDirection('UP')
   }
 
   return (
