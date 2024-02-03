@@ -11,9 +11,12 @@ function generateCellStyle(isSnake, isFood) {
 
 function App() {
   const [snake, setSnake] = useState(INITIAL_SNAKE_POSITION)
-  const [food, setFood] = useState({ x: 0, y: 0 })
-  const [score, setScore] = useState(30)
-  const [direction, setDirection] = useState('UP')
+  const [food, setFood] = useState({
+    x: Math.floor(Math.random() * TOTAL_BOARD_SIZE),
+    y: Math.floor(Math.random() * TOTAL_BOARD_SIZE),
+  })
+  const [score, setScore] = useState(0)
+  const [direction, setDirection] = useState('LEFT')
 
   useEffect(() => {
     const interval = setInterval(() => updatePosition(direction), 500)
@@ -74,7 +77,7 @@ function App() {
       newSnakePosition[0].x === food.x && newSnakePosition[0].y === food.y
     if (isFoodEaten) {
       renderFood()
-      setScore((prev) => prev + 10)
+      setScore((prev) => prev + 1)
     } else {
       newSnakePosition.pop()
     }
