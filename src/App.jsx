@@ -9,6 +9,7 @@ function App() {
   ]
   const [snake, setSnake] = useState(initialSnakePosition)
   const [food, setFood] = useState({ x: 0, y: 0 })
+  const [score, setScore] = useState(30)
 
   function renderBoard(totalBoardSize) {
     const boardArray = []
@@ -34,7 +35,7 @@ function App() {
 
   return (
     <div className="container flex h-screen w-screen max-w-full flex-col items-center justify-center bg-black">
-      <Score />
+      <Score score={score} />
       <div className="board grid-cols-20 grid-rows-20 grid">
         {renderBoard(TOTAL_BOARD_SIZE)}
       </div>
