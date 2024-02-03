@@ -1,4 +1,5 @@
 import { TOTAL_BOARD_SIZE } from './utils'
+import Score from './components/Score'
 
 function renderBoard(totalBoardSize) {
   const boardArray = []
@@ -19,10 +20,7 @@ function renderBoard(totalBoardSize) {
 function App() {
   return (
     <div className="container flex h-screen w-screen max-w-full flex-col items-center justify-center bg-black">
-      <div className="score flex gap-2 text-white">
-        <p>Score</p>
-        <p>30</p>
-      </div>
+      <Score />
       <div className="board grid-cols-20 grid-rows-20 grid">
         {renderBoard(TOTAL_BOARD_SIZE)}
       </div>
