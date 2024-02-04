@@ -157,9 +157,10 @@ function SnakeGame() {
   }
 
   useEffect(() => {
+    if (!isGameStart) return
     window.addEventListener('keydown', updateDirection)
     return () => window.removeEventListener('keydown', updateDirection)
-  }, [updateDirection])
+  }, [updateDirection, isGameStart, isGameOver])
 
   return (
     <>
