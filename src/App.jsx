@@ -7,7 +7,7 @@ import VirtualKeyboard from './components/VirtualKeyboard'
 function generateCellStyle(isSnake, isFood) {
   let cellStyle = 'xs:h-6 xs:w-6 w-4 h-4 border border-black '
   if (isSnake) return (cellStyle += 'bg-white')
-  if (isFood) return (cellStyle += 'bg-red-800')
+  if (isFood) return (cellStyle += 'bg-red-600 rounded-full')
   return (cellStyle += 'bg-slate-800')
 }
 
@@ -15,6 +15,16 @@ function renderFood() {
   const xPosition = Math.floor(Math.random() * TOTAL_BOARD_SIZE)
   const yPosition = Math.floor(Math.random() * TOTAL_BOARD_SIZE)
   return { x: xPosition, y: yPosition }
+}
+
+function getOppositeDirection(currentDirection) {
+  const opposite = {
+    UP: 'DOWN',
+    DOWN: 'UP',
+    LEFT: 'RIGHT',
+    RIGHT: 'LEFT',
+  }
+  return opposite[currentDirection]
 }
 
 function App() {
@@ -33,12 +43,6 @@ function App() {
     return () => clearInterval(interval)
   }, [isGameStart, direction])
 
-  useEffect(() => {
-    window.addEventListener('keydown', (e) => updateDirection(e.key))
-    return () =>
-      window.removeEventListener('keydown', (e) => updateDirection(e.key))
-  }, [direction])
-
   const renderBoard = useMemo(() => {
     const boardArray = []
     for (let row = 0; row < TOTAL_BOARD_SIZE; row++) {
@@ -48,7 +52,14 @@ function App() {
 
         const cellStyle = generateCellStyle(isSnake, isFood)
 
-        const cell = <div className={cellStyle} key={`${row}-${col}`} />
+        const cell = isFood ? (
+          <div className="relative" key={`${row}-${col}`}>
+            <div className="animate-duration-[3000ms] absolute h-full w-full animate-ping rounded-full bg-red-800"></div>
+            <div className={cellStyle} />
+          </div>
+        ) : (
+          <div className={cellStyle} key={`${row}-${col}`} />
+        )
         boardArray.push(cell)
       }
     }
@@ -105,30 +116,24 @@ function App() {
   }
 
   const updateDirection = useCallback(
-    (direction) => {
+    (input) => {
       const directionKey = {
         ArrowUp: 'UP',
         ArrowDown: 'DOWN',
         ArrowLeft: 'LEFT',
         ArrowRight: 'RIGHT',
       }
-      const newDirection = directionKey[direction]
+      const newDirection =
+        typeof input === 'object'
+          ? directionKey[input.key]
+          : directionKey[input]
+
       if (newDirection && newDirection !== getOppositeDirection(direction)) {
         setDirection(newDirection)
       }
     },
     [direction]
   )
-
-  function getOppositeDirection(currentDirection) {
-    const opposite = {
-      UP: 'DOWN',
-      DOWN: 'UP',
-      LEFT: 'RIGHT',
-      RIGHT: 'LEFT',
-    }
-    return opposite[currentDirection]
-  }
 
   function resetGame() {
     setSnake(INITIAL_SNAKE_POSITION)
@@ -141,6 +146,11 @@ function App() {
     setIsGameStart(true)
     setIsGameOver(false)
   }
+
+  useEffect(() => {
+    window.addEventListener('keydown', updateDirection)
+    return () => window.removeEventListener('keydown', updateDirection)
+  }, [updateDirection])
 
   return (
     <div className="container flex h-screen w-screen max-w-full flex-col items-center justify-center bg-black">
