@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react'
-import { TOTAL_BOARD_SIZE, INITIAL_SNAKE_POSITION } from '../utils'
+import { TOTAL_BOARD_SIZE, INITIAL_SNAKE_POSITION, throttle } from '../utils'
 import Scoreboard from '../components/Scoreboard'
 import VirtualKeyboard from '../components/VirtualKeyboard'
 import StatusMap from '../components/StatusMap'
@@ -57,7 +57,7 @@ function SnakeGame() {
         setIsGameStart(false)
         resetGame()
       }
-    }, 300)
+    }, 250)
 
     return () => clearInterval(interval)
   }, [isGameStart, direction, snake, food])
@@ -125,7 +125,7 @@ function SnakeGame() {
   }
 
   const updateDirection = useCallback(
-    (input) => {
+    throttle((input) => {
       const directionKey = {
         ArrowUp: 'UP',
         ArrowDown: 'DOWN',
@@ -140,7 +140,7 @@ function SnakeGame() {
       if (newDirection && newDirection !== getOppositeDirection(direction)) {
         setDirection(newDirection)
       }
-    },
+    }, 250),
     [direction]
   )
 
