@@ -2,7 +2,7 @@ function StatusMap({ isGameStart, isGameOver, startGame }) {
   return (
     <>
       {!isGameStart && (
-        <div className="mask absolute flex h-full w-full flex-col items-center justify-center gap-4 bg-opacity-50">
+        <div className="mask animate-fade-up absolute flex h-full w-full flex-col items-center justify-center gap-4 bg-opacity-50">
           {isGameOver && (
             <p className="text-2xl font-bold text-white">Game Over</p>
           )}
