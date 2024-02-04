@@ -1,7 +1,11 @@
+import useUserStore from '../store/userStore'
+
 function StatusMap({ isGameStart, isGameOver, startGame }) {
+  const userName = useUserStore((state) => state.userName)
+
   return (
     <>
-      {!isGameStart && (
+      {!isGameStart && userName && (
         <div className="mask animate-fade-up absolute flex h-full w-full flex-col items-center justify-center gap-4 bg-opacity-50">
           {isGameOver && (
             <p className="text-2xl font-bold text-white">Game Over</p>

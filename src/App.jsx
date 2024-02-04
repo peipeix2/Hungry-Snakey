@@ -1,8 +1,10 @@
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useEffect, useState, useCallback, useMemo, createContext } from 'react'
 import { TOTAL_BOARD_SIZE, INITIAL_SNAKE_POSITION } from './utils'
 import Score from './components/Score'
 import StatusMap from './components/StatusMap'
 import VirtualKeyboard from './components/VirtualKeyboard'
+import UserInfo from './components/UserInfo'
+import { Toaster } from 'react-hot-toast'
 
 function generateCellStyle(isSnake, isFood) {
   let cellStyle = 'xs:h-6 xs:w-6 w-4 h-4 border border-black '
@@ -162,8 +164,11 @@ function App() {
           isGameOver={isGameOver}
           startGame={startGame}
         />
+        <UserInfo isGameStart={isGameStart} />
       </div>
+
       <VirtualKeyboard updateDirection={updateDirection} />
+      <Toaster />
     </div>
   )
 }
