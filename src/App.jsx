@@ -2,9 +2,10 @@ import { useEffect, useState, useCallback, useMemo } from 'react'
 import { TOTAL_BOARD_SIZE, INITIAL_SNAKE_POSITION } from './utils'
 import Score from './components/Score'
 import StatusMap from './components/StatusMap'
+import VirtualKeyboard from './components/VirtualKeyboard'
 
 function generateCellStyle(isSnake, isFood) {
-  let cellStyle = 'h-6 w-6 border border-black '
+  let cellStyle = 'xs:h-6 xs:w-6 w-4 h-4 border border-black '
   if (isSnake) return (cellStyle += 'bg-white')
   if (isFood) return (cellStyle += 'bg-red-800')
   return (cellStyle += 'bg-slate-800')
@@ -33,8 +34,9 @@ function App() {
   }, [isGameStart, direction])
 
   useEffect(() => {
-    window.addEventListener('keydown', updateDirection)
-    return () => window.removeEventListener('keydown', updateDirection)
+    window.addEventListener('keydown', (e) => updateDirection(e.key))
+    return () =>
+      window.removeEventListener('keydown', (e) => updateDirection(e.key))
   }, [direction])
 
   const renderBoard = useMemo(() => {
@@ -103,14 +105,14 @@ function App() {
   }
 
   const updateDirection = useCallback(
-    (e) => {
+    (direction) => {
       const directionKey = {
         ArrowUp: 'UP',
         ArrowDown: 'DOWN',
         ArrowLeft: 'LEFT',
         ArrowRight: 'RIGHT',
       }
-      const newDirection = directionKey[e.key]
+      const newDirection = directionKey[direction]
       if (newDirection && newDirection !== getOppositeDirection(direction)) {
         setDirection(newDirection)
       }
@@ -143,7 +145,7 @@ function App() {
   return (
     <div className="container flex h-screen w-screen max-w-full flex-col items-center justify-center bg-black">
       <Score score={score} />
-      <div className="board grid-cols-20 grid-rows-20 relative grid">
+      <div className="board grid-cols-20 grid-rows-20 xs:max-w-max relative grid max-w-xs">
         {renderBoard}
         <StatusMap
           isGameStart={isGameStart}
@@ -151,6 +153,7 @@ function App() {
           startGame={startGame}
         />
       </div>
+      <VirtualKeyboard updateDirection={updateDirection} />
     </div>
   )
 }
