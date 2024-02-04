@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from 'react'
 import { TOTAL_BOARD_SIZE, INITIAL_SNAKE_POSITION } from '../utils'
-import Score from '../components/Score'
+import Scoreboard from '../components/Scoreboard'
 import VirtualKeyboard from '../components/VirtualKeyboard'
 import StatusMap from '../components/StatusMap'
 import UserInfo from '../components/UserInfo'
@@ -68,7 +68,6 @@ function SnakeGame() {
   }, [food, snake])
 
   function updatePosition(direction) {
-    console.log('updatePosition called', direction)
     setSnake((prevSnake) => {
       const head = prevSnake[0]
       let newHead
@@ -119,7 +118,6 @@ function SnakeGame() {
 
   const updateDirection = useCallback(
     (input) => {
-      console.log('call')
       const directionKey = {
         ArrowUp: 'UP',
         ArrowDown: 'DOWN',
@@ -157,7 +155,7 @@ function SnakeGame() {
 
   return (
     <>
-      <Score score={score} />
+      <Scoreboard score={score} />
       <div className="board grid-cols-20 grid-rows-20 xs:max-w-max relative grid max-w-xs">
         {renderBoard}
         <StatusMap

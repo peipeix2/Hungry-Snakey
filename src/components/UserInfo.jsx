@@ -8,9 +8,11 @@ function UserInfo({ isGameStart }) {
   const setUserName = useUserStore((state) => state.setUserName)
 
   function handleSubmit() {
-    console.log(name, typeof name)
     const valid = name && name.trim().length !== 0
-    if (valid) {
+    const isTooLong = name && name.trim().length > 20
+    if (isTooLong) {
+      toast.error("User name can't exceed 20 words")
+    } else if (valid) {
       setUserName(name)
       setName('')
       localStorage.setItem('user', name)
