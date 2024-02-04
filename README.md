@@ -6,7 +6,7 @@
   <p align="center">
     <a href="https://hungry-snakey.web.app/">Demo</a>
     |
-    <a href="https://github.com/peipeix2/Filter/#Contact">Contact</a>
+    <a href="https://github.com/peipeix2/Hungry-Snakey/#Contact">Contact</a>
   </p>
 </div>
 
