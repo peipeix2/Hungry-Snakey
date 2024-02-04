@@ -1,4 +1,5 @@
 import useUserStore from '../store/userStore'
+import Button from './Button'
 
 function StatusMap({ isGameStart, isGameOver, startGame }) {
   const userName = useUserStore((state) => state.userName)
@@ -16,12 +17,10 @@ function StatusMap({ isGameStart, isGameOver, startGame }) {
               className="xs:h-32 xs:w-32 animate-infinite h-20 w-20 animate-bounce"
             />
           )}
-          <button
-            className="start-button xs:text-base cursor-pointer rounded-3xl border-2 border-white px-6 py-1 text-sm text-white hover:bg-white hover:text-black"
+          <Button
             onClick={startGame}
-          >
-            {isGameOver ? 'Play again' : 'Start'}
-          </button>
+            word={isGameOver ? 'Play again' : 'Start'}
+          />
         </div>
       )}
     </>

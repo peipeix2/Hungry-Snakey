@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import useUserStore from '../store/userStore'
 import toast from 'react-hot-toast'
+import Button from './Button'
 
 function UserInfo({ isGameStart }) {
   const [name, setName] = useState('')
@@ -30,12 +31,7 @@ function UserInfo({ isGameStart }) {
             className="fold-bold border-b-2 border-b-white bg-transparent pb-1 text-xl text-white outline-none focus:bg-none"
             onChange={(e) => setName(e.target.value)}
           />
-          <button
-            className="start-button xs:text-base cursor-pointer rounded-3xl border-2 border-white px-6 py-1 text-sm text-white hover:bg-white hover:text-black"
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
+          <Button word="Submit" onClick={handleSubmit} />
         </div>
       )}
     </>
