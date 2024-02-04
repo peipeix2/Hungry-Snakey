@@ -1,5 +1,6 @@
 import useUserStore from '../store/userStore'
 import Button from './Button'
+import readyLogoURL from '../assets/ready_logo.png'
 
 function StatusMap({ isGameStart, isGameOver, startGame }) {
   const userName = useUserStore((state) => state.userName)
@@ -13,7 +14,7 @@ function StatusMap({ isGameStart, isGameOver, startGame }) {
           )}
           {!isGameOver && (
             <img
-              src="src/assets/ready_logo.png"
+              src={readyLogoURL}
               className="xs:h-32 xs:w-32 animate-infinite h-20 w-20 animate-bounce"
             />
           )}
