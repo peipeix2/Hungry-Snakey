@@ -7,11 +7,33 @@ import {
 
 function ArrowButtons({ direction, onClick }) {
   const directionObject = {
-    UP: <IoMdArrowDropupCircle color="white" size="40" onClick={onClick} />,
-    DOWN: <IoMdArrowDropdownCircle color="white" size="40" onClick={onClick} />,
-    LEFT: <IoMdArrowDropleftCircle color="white" size="40" onClick={onClick} />,
+    UP: (
+      <IoMdArrowDropupCircle
+        className=" text-white hover:text-gray-500"
+        size="40"
+        onClick={onClick}
+      />
+    ),
+    DOWN: (
+      <IoMdArrowDropdownCircle
+        className=" text-white hover:text-gray-500"
+        size="40"
+        onClick={onClick}
+      />
+    ),
+    LEFT: (
+      <IoMdArrowDropleftCircle
+        className=" text-white hover:text-gray-500"
+        size="40"
+        onClick={onClick}
+      />
+    ),
     RIGHT: (
-      <IoMdArrowDroprightCircle color="white" size="40" onClick={onClick} />
+      <IoMdArrowDroprightCircle
+        className=" text-white hover:text-gray-500"
+        size="40"
+        onClick={onClick}
+      />
     ),
   }
 
