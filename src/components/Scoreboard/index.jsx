@@ -7,7 +7,7 @@ function Scoreboard({ score }) {
       <img src="src/assets/logo.png" className="w-1/2" />
       <div className="flex items-center gap-4">
         <UserName />
-        <Score score={score} />
+        <Score />
       </div>
     </div>
   )

@@ -4,6 +4,7 @@ import Scoreboard from '../components/Scoreboard'
 import VirtualKeyboard from '../components/VirtualKeyboard'
 import StatusMap from '../components/StatusMap'
 import UserInfo from '../components/UserInfo'
+import useGameStore from '../store/gameStore'
 
 function generateCellStyle(isSnake, isFood) {
   let cellStyle = 'xs:h-6 xs:w-6 w-4 h-4 border border-black '
@@ -31,18 +32,35 @@ function getOppositeDirection(currentDirection) {
 function SnakeGame() {
   const [snake, setSnake] = useState(INITIAL_SNAKE_POSITION)
   const [food, setFood] = useState(() => renderFood())
-  const [score, setScore] = useState(0)
   const [direction, setDirection] = useState('RIGHT')
   const [isGameStart, setIsGameStart] = useState(false)
   const [isGameOver, setIsGameOver] = useState(false)
+  const { addScore, resetScore } = useGameStore()
 
   useEffect(() => {
+    if (!isGameStart) return
+
     const interval = setInterval(() => {
-      if (!isGameStart) return
-      updatePosition(direction)
+      const newState = calculateNewState(direction, snake, food)
+
+      if (!newState) return
+
+      setSnake(newState.newSnake)
+
+      if (newState.isFoodEaten) {
+        setFood(renderFood())
+        addScore()
+      }
+
+      if (newState.isGameOver) {
+        setIsGameOver(true)
+        setIsGameStart(false)
+        resetGame()
+      }
     }, 300)
+
     return () => clearInterval(interval)
-  }, [isGameStart, direction])
+  }, [isGameStart, direction, snake, food])
 
   const renderBoard = useMemo(() => {
     const boardArray = []
@@ -67,53 +85,43 @@ function SnakeGame() {
     return boardArray
   }, [food, snake])
 
-  function updatePosition(direction) {
-    setSnake((prevSnake) => {
-      const head = prevSnake[0]
-      let newHead
-      switch (direction) {
-        case 'UP':
-          newHead = { x: head.x - 1, y: head.y }
-          break
-        case 'DOWN':
-          newHead = { x: head.x + 1, y: head.y }
-          break
-        case 'LEFT':
-          newHead = { x: head.x, y: head.y - 1 }
-          break
-        case 'RIGHT':
-          newHead = { x: head.x, y: head.y + 1 }
-          break
-        default:
-          return prevSnake
-      }
+  function calculateNewState(direction, snake, food) {
+    const head = snake[0]
+    let newHead
 
-      const isFoodEaten = newHead.x === food.x && newHead.y === food.y
+    switch (direction) {
+      case 'UP':
+        newHead = { x: head.x - 1, y: head.y }
+        break
+      case 'DOWN':
+        newHead = { x: head.x + 1, y: head.y }
+        break
+      case 'LEFT':
+        newHead = { x: head.x, y: head.y - 1 }
+        break
+      case 'RIGHT':
+        newHead = { x: head.x, y: head.y + 1 }
+        break
+    }
 
-      if (isFoodEaten) {
-        setFood(renderFood())
-        setScore(score + 1)
-        return [newHead, ...prevSnake]
-      }
-      const newSnake = [newHead, ...prevSnake.slice(0, -1)]
+    const isFoodEaten = newHead.x === food.x && newHead.y === food.y
+    const newSnake = isFoodEaten
+      ? [newHead, ...snake]
+      : [newHead, ...snake.slice(0, -1)]
+    const isGameOverCondition =
+      newHead.x < 0 ||
+      newHead.x >= TOTAL_BOARD_SIZE ||
+      newHead.y < 0 ||
+      newHead.y >= TOTAL_BOARD_SIZE ||
+      newSnake
+        .slice(1)
+        .some((item) => item.x === newHead.x && item.y === newHead.y)
 
-      const isGameOverCondition =
-        newHead.x < 0 ||
-        newHead.x >= TOTAL_BOARD_SIZE ||
-        newHead.y < 0 ||
-        newHead.y >= TOTAL_BOARD_SIZE ||
-        newSnake
-          .slice(1)
-          .some((item) => item.x === newHead.x && item.y === newHead.y)
-
-      if (isGameOverCondition) {
-        setIsGameOver(true)
-        setIsGameStart(false)
-        resetGame()
-        return prevSnake
-      }
-      return newSnake
-    })
+    return {
+      newSnake,
+      isFoodEaten,
+      isGameOver: isGameOverCondition,
+    }
   }
 
   const updateDirection = useCallback(
@@ -138,7 +146,7 @@ function SnakeGame() {
 
   function resetGame() {
     setSnake(INITIAL_SNAKE_POSITION)
-    setScore(0)
+    resetScore()
     setFood(renderFood())
     setDirection('RIGHT')
   }
@@ -155,7 +163,7 @@ function SnakeGame() {
 
   return (
     <>
-      <Scoreboard score={score} />
+      <Scoreboard />
       <div className="board grid-cols-20 grid-rows-20 xs:max-w-max relative grid max-w-xs">
         {renderBoard}
         <StatusMap
