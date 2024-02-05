@@ -16,6 +16,14 @@
 
 ![Alt text](src/assets/snake-demo1.png)
 
+## Features
+
+- User can type in their user name.
+- User can start their game at their preferred timing.
+- When the snake eats the food, the score will increase by one.
+- When the snake hits the grid or collides with itself, the game will end.
+- User can restart the game after the game is over.
+
 ## Built with
 
 ![React](https://img.shields.io/badge/React-61DAFB.svg?style=for-the-badge&logo=React&logoColor=black) ![Vite](https://img.shields.io/badge/Vite-646CFF.svg?style=for-the-badge&logo=Vite&logoColor=white) ![Tailwind](https://img.shields.io/badge/Tailwind%20CSS-06B6D4.svg?style=for-the-badge&logo=Tailwind-CSS&logoColor=white) ![Firebase](https://img.shields.io/badge/Firebase-FFCA28.svg?style=for-the-badge&logo=Firebase&logoColor=black) ![npm](https://img.shields.io/badge/npm-CB3837.svg?style=for-the-badge&logo=npm&logoColor=white) ![Git](https://img.shields.io/badge/Git-F05032.svg?style=for-the-badge&logo=Git&logoColor=white)
